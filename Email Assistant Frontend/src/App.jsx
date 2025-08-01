@@ -11,6 +11,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Button from "@mui/material/Button";
 import SendIcon from "@mui/icons-material/Send";
 import CircularProgress from "@mui/material/CircularProgress";
+import axios from "axios";
 
 function App() {
   const [emailContent, setEmailContent] = useState("");
@@ -18,13 +19,32 @@ function App() {
   const [tone, setTone] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const handleSubmit = async () => {};
+  const handleSubmit = async () => {
+    setLoading(true);
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/api/email/generate",
+        { emailContent, tone }
+      );
+      setGeneratedReply(
+        typeof response.data === "string"
+          ? response.data
+          : JSON.stringify(response.data)
+      );
+    } catch (error) {
+      console.error("API Error:", error);
+      setGeneratedReply("Failed to generate reply. Try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" component="h2">
         Email Reply Generator :
       </Typography>
+
       <Box component="section" sx={{ p: 2 }}>
         <TextField
           id="outlined-basic"
@@ -53,6 +73,7 @@ function App() {
             <MenuItem value="Feedback">Rejection</MenuItem>
           </Select>
         </FormControl>
+
         <Button
           endIcon={<SendIcon />}
           variant="contained"
