@@ -79,7 +79,7 @@ public class EmailService {
 
     private String buildPrompt(EmailRequest emailRequest) {
         StringBuilder prompt = new StringBuilder();
-        prompt.append("You are an email assistant. Your task is to generate a reply to the following email content:\n\n");
+        prompt.append("You are an email assistant. Your task is to generate a reply to the following email content(don't write subject):\n\n");
         if(emailRequest.getTone()!=null && !emailRequest.getTone().isEmpty()) {
             prompt.append("Tone: ").append(emailRequest.getTone()).append("\n\n");
         }
